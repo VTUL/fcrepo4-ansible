@@ -1,0 +1,9 @@
+---
+- name: provision a Fedora 4 instance
+  hosts: all
+  user: "{{ ansible_user }}"
+  vars_files:
+    - site_vars.yml
+  gather_facts: true
+  roles:
+    - { role: java8, become: yes }
