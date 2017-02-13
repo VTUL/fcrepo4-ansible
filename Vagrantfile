@@ -5,14 +5,30 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
-Vagrant.configure("2") do |config|
+
+VAGRANTFILE_API_VERSION = "2"
+
+def security_groups( env_var )
+  s = ENV[ env_var ]
+  if s.nil?
+    # Return some default
+    case env_var
+      when "AWS_SECURITY_GROUPS" then ["default_vpc_web_vt_ssh"]
+      else                            []
+    end
+  else
+    s.split
+  end
+end
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
+  # config.vm.box = "ubuntu/trusty64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -22,7 +38,7 @@ Vagrant.configure("2") do |config|
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
+  # config.vm.network "forwarded_port", guest: 8080, host: 8080
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -73,6 +89,40 @@ Vagrant.configure("2") do |config|
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "ansible/fcrepo4.yml"
     ansible.verbose = ""
+  end
+
+  # Application server
+  config.vm.define :fcrepo4 do |fcrepo4|
+    fcrepo4.vm.hostname = "fcrepo4"
+
+    fcrepo4.vm.provider :virtualbox do |vb, override|
+      override.vm.box = "ubuntu/trusty64"
+      vb.memory = 4096
+      vb.cpus = 2
+      # Forward Tomcat/Fedora port in VM to port 8080 on local machine
+      override.vm.network :forwarded_port, host: 8080, guest: 8080
+    end
+
+    fcrepo4.vm.provider :aws do |aws, override|
+      keypair = "#{ENV['KEYPAIR_NAME']}"
+      keypair_filename = "#{ENV['KEYPAIR_FILE']}"
+      override.vm.box = "aws_dummy"
+      override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+      override.vm.box_check_update = false
+      aws.access_key_id = ENV['AWS_ACCESS_KEY']
+      aws.secret_access_key = ENV['AWS_SECRET_KEY']
+      aws.keypair_name = keypair
+      aws.ami = "ami-df0607b5" # Ubuntu Trusty LTS
+      aws.region = "us-east-1"
+      aws.instance_type = "t2.medium"
+      aws.security_groups = security_groups('AWS_SECURITY_GROUPS')
+      override.ssh.username = "ubuntu"
+      override.ssh.private_key_path = "#{keypair_filename}"
+      aws.tags = {
+        'Name' => 'fcrepo4'
+      }
+    end
+
   end
 
 end
