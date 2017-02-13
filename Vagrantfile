@@ -92,24 +92,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Application server
-  config.vm.define :hydravm do |hydravm|
-    hydravm.vm.hostname = "hydravm"
+  config.vm.define :fcrepo4 do |fcrepo4|
+    fcrepo4.vm.hostname = "fcrepo4"
 
-    hydravm.vm.provider :virtualbox do |vb, override|
+    fcrepo4.vm.provider :virtualbox do |vb, override|
       override.vm.box = "ubuntu/trusty64"
       vb.memory = 4096
       vb.cpus = 2
-      # Forward Solr port in VM to local machine
-      override.vm.network :forwarded_port, host: 8983, guest: 8983
-      # Forward Tomcat/Fedora port in VM to port 8888 on local machine
+      # Forward Tomcat/Fedora port in VM to port 8080 on local machine
       override.vm.network :forwarded_port, host: 8080, guest: 8080
-      # Forward HTTP port in VM to port 8080 on local machine
-      override.vm.network :forwarded_port, host: 80, guest: 80
-      # Forward HTTPS port in VM to port 4443 on local machine
-      override.vm.network :forwarded_port, host: 4443, guest: 443
     end
 
-    hydravm.vm.provider :aws do |aws, override|
+    fcrepo4.vm.provider :aws do |aws, override|
       keypair = "#{ENV['KEYPAIR_NAME']}"
       keypair_filename = "#{ENV['KEYPAIR_FILE']}"
       override.vm.box = "aws_dummy"
