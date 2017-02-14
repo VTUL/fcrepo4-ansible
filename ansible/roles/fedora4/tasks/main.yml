@@ -36,7 +36,7 @@
     dest: /etc/default/tomcat7
     line: >
       JAVA_OPTS='-Dfcrepo.home={{ fedora_data_dir }}
-      -Dfcrepo.modeshape.configuration="{{fedora_modeshape_map[fedora_version]}}"
+      -Dfcrepo.modeshape.configuration="{{fedora_modeshape_config}}"
       -Djava.awt.headless=true
       -Dfile.encoding=UTF-8
       -server
