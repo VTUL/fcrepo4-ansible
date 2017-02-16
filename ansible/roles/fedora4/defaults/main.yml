@@ -4,6 +4,9 @@ fedora_user: 'tomcat7'
 fedora_group: '{{ fedora_user }}'
 fedora_user_home: '/var/local/{{ fedora_user }}'
 fedora_data_dir: '{{ fedora_user_home }}/fedora-data'
+fedora_config_dir: "{{ fedora_user_home }}/fedora-config"
 fedora_app_dir: '/var/lib/tomcat7/webapps'
-fedora_modeshape_config: "classpath:/config/{{'minimal-default' if fedora_version | version_compare('4.6', '<') else 'file-simple'}}/repository.json"
+fedora_modeshape_config: "classpath:/config/{{project_modeshape_config | default('file-simple')}}/repository.json"
+fedora_local_modeshape_config_file: "{{ local_files_dir }}/repository.json"
+fedora_remote_modeshape_config_file: "{{ fedora_config_dir }}/repository.json"
 fedora_java_vm_opts: "{{ project_fedora_java_vm_opts | default('-Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:+DisableExplicitGC') }}"
