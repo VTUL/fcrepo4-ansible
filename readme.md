@@ -1,6 +1,6 @@
 # Fedora 4 Ansible
 
-This is the GitHub repo of the Ansible script for [Fedora 4](https://github.com/fcrepo4/fcrepo4). 
+This is the GitHub repo of the Ansible script for [Fedora 4](https://github.com/fcrepo4/fcrepo4).
 
 ## Usage
 To install the chosen application from scratch on a server using the current local configuration file settings, do the following:
@@ -28,7 +28,7 @@ ansible-playbook --limit [ip address] site.yml -b
 
 * Default is Fedora 4.7.1 with leveldb.
 * To install different Fedora 4 version or other configurations, see [fedora4 role readme](ansible/roles/fedora4)
-* To install Fedora 4 with PostgreSQL database, see config example [postgres_site_vars.yml](ansible/postgres_site_vars.yml)  
+* To install Fedora 4 with PostgreSQL database, set `fedora_use_postgresql_modeshape: yes` in `ansible/site_vars.yml` and set other DB-related settings there as needed.  
 
 Installation
 ------------
@@ -39,7 +39,7 @@ To use these scripts, [Vagrant](https://www.vagrantup.com/) must already have be
 
 You will need version 1.6+ of [Vagrant](https://vagrantup.com) installed on the local system.
 
-A version of  [Ansible](https://ansible.com) at least 2.1+ must be installed on the local system.
+A version of [Ansible](https://ansible.com) at least 2.1+ must be installed on the local system.
 
 Ansible is easily installed via [Homebrew](http://brew.sh) on Mac OSX via the following command:
 
@@ -61,7 +61,7 @@ For all environments, a deployment settings file needs to be created in the `ans
 
 #### Local files
 
-Sometimes, local files may be supplied during the deployment or provisioning of a target application. A local modeshape repository.json file maybe supply by placing it in the `local_files` directory. The contents of the `local_files` directory hierarchy are subject to `.gitignore` and so won't be checked in via Git accidentally.
+Sometimes, local files may be supplied during the deployment or provisioning of a target application. A local modeshape repository.json file may be supplied by placing it in the `local_files` directory. The contents of the `local_files` directory hierarchy are subject to `.gitignore` and so won't be checked in via Git accidentally.
 
 
 ### AWS
@@ -124,11 +124,10 @@ https://[IP]
 
 ### Postgres
 
-Currently, only local databases are supported.  Thus, ensure `project_db_host` does not point to a remote PostgreSQL server.
+Currently, only local databases are tested.  Thus, ensure `project_db_host` does not point to a remote PostgreSQL server.
 
 ## Maintainers
 
 Current maintainers:
 * [Paul Mather](https://github.com/pmather)
 * [Yinlin Chen](https://github.com/yinlinchen)
-

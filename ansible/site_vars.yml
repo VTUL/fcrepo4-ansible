@@ -1,3 +1,12 @@
 ---
 local_files_dir: "{{ playbook_dir }}/local_files"
 apt_cache_timeout: 1800
+fedora_use_postgresql_modeshape: no
+project_db_host: localhost
+# The PostgreSQL user fedora4 used to create the fcrepo PostgreSQL database
+project_db_user: 'fedora4'
+project_db_password: 'fedora4'
+project_db_port: 5432
+project_db_name: 'fcrepo'
+project_modeshape_config: "{{'jdbc-postgresql' if fedora_use_postgresql_modeshape|bool else 'file-simple'}}"
+project_fedora_java_vm_opts: '-Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:+DisableExplicitGC'
