@@ -1,0 +1,7 @@
+---
+- name: restart postgres
+  service:
+    name: postgresql
+    state: restarted
+  become: yes
+  when: postgres_is_local
