@@ -39,7 +39,7 @@ To use these scripts, [Vagrant](https://www.vagrantup.com/) must already have be
 
 You will need version 1.6+ of [Vagrant](https://vagrantup.com) installed on the local system.
 
-If you choose to use the `ansible` Vagrant provisioner (see below), a version of  [Ansible](https://ansible.com) at least 2.1+ must also be installed on the local system.
+A version of  [Ansible](https://ansible.com) at least 2.1+ must be installed on the local system.
 
 Ansible is easily installed via [Homebrew](http://brew.sh) on Mac OSX via the following command:
 
@@ -58,15 +58,10 @@ Configuration
 
 For all environments, a deployment settings file needs to be created in the `ansible/` directory. This file is called `site_vars.yml`:
 
-#### TLS certificate and key
-
-A TLS certificate and key file may be placed in the `local_files/` directory for use in the system being set up. The certificate should be named `local_files/cert.pem` and the key named `local_files/key.pem`.
-
-If either of the aforementioned files is not present then a self-signed TLS certificate and key pair will be generated and used instead.
 
 #### Local files
 
-Sometimes, local files may be supplied during the deployment or provisioning of a target application, e.g., carousel images for the `data-repo` application, TLS key files, etc. Such local (and potentially sensitive) files should be placed in the `local_files` directory. The contents of the `local_files` directory hierarchy are subject to `.gitignore` and so won't be checked in via Git accidentally.
+Sometimes, local files may be supplied during the deployment or provisioning of a target application. A local modeshape repository.json file maybe supply by placing it in the `local_files` directory. The contents of the `local_files` directory hierarchy are subject to `.gitignore` and so won't be checked in via Git accidentally.
 
 
 ### AWS
@@ -126,6 +121,10 @@ or
 ```
 https://[IP]
 ```
+
+### Postgres
+
+Currently, only local databases are supported.  Thus, ensure `project_db_host` does not point to a remote PostgreSQL server.
 
 ## Maintainers
 
