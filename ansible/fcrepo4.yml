@@ -6,4 +6,4 @@
     - site_vars.yml
   gather_facts: true
   roles:
-    - { role: tomcat7, become: yes }
+    - { role: fedora4, become: yes }

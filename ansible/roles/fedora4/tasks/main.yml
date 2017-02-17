@@ -1,0 +1,65 @@
+---
+- name: stop tomcat
+  service:
+    name: tomcat7
+    state: stopped
+  notify: restart tomcat
+
+- name: add the fedora group
+  group:
+    name: '{{ fedora_group }}'
+
+- name: create the fedora user
+  user:
+    name: '{{ fedora_user }}'
+    group: '{{ fedora_group }}'
+    home: '{{ fedora_user_home }}'
+
+- name: create fedora data dir
+  file:
+    path: '{{ fedora_data_dir }}'
+    owner: '{{ fedora_user }}'
+    group: '{{ fedora_group }}'
+    mode: 0770
+    state: directory
+
+- name: create fedora config directory
+  file:
+    path: "{{ fedora_remote_modeshape_config_file|dirname }}"
+    owner: "{{ fedora_user }}"
+    group: "{{ fedora_group }}"
+    mode: 0770
+    state: directory
+  when: fedora_local_modeshape_config_file|is_file
+
+- name: download fedora war
+  get_url:
+    url: http://repo1.maven.org/maven2/org/fcrepo/fcrepo-webapp/{{ fedora_version }}/fcrepo-webapp-{{ fedora_version }}.war
+    dest: '{{ fedora_app_dir }}/fcrepo.war'
+    owner: '{{ fedora_user }}'
+    group: '{{ fedora_group }}'
+    mode: 0444
+    timeout: 100
+
+- name: copy modeshape repository.json if it exists locally
+  copy:
+    src: "{{ fedora_local_modeshape_config_file }}"
+    dest: "{{ fedora_remote_modeshape_config_file }}"
+    owner: "{{ fedora_user }}"
+    group: "{{ fedora_group }}"
+    mode: 0440
+  when: fedora_local_modeshape_config_file|is_file
+
+- name: add fedora and java config options to tomcat
+  lineinfile:
+    dest: /etc/default/tomcat7
+    line: >
+      JAVA_OPTS='-Dfcrepo.home={{ fedora_data_dir }}
+      -Dfcrepo.modeshape.configuration="{{'file:'+fedora_remote_modeshape_config_file if fedora_local_modeshape_config_file|is_file else fedora_modeshape_config}}"
+      -Djava.awt.headless=true
+      -Dfile.encoding=UTF-8
+      -server
+      {{ fedora_java_vm_opts }}'
+    regexp: "^JAVA_OPTS=.*"
+    state: present
+  notify: restart tomcat
