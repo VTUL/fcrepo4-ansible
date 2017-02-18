@@ -1,3 +1,4 @@
 ---
 dependencies:
+  - { role: postgresql, become: yes, when: fedora_use_postgresql_modeshape|bool }
   - { role: tomcat7 }

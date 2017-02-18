@@ -6,5 +6,4 @@
     - site_vars.yml
   gather_facts: true
   roles:
-    # - { role: postgresql, become: yes, postgres_version: '9.4' }
     - { role: fedora4, become: yes }

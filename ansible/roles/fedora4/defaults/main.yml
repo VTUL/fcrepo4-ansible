@@ -9,4 +9,5 @@ fedora_app_dir: '/var/lib/tomcat7/webapps'
 fedora_modeshape_config: "classpath:/config/{{project_modeshape_config | default('file-simple')}}/repository.json"
 fedora_local_modeshape_config_file: "{{ local_files_dir }}/repository.json"
 fedora_remote_modeshape_config_file: "{{ fedora_config_dir }}/repository.json"
+fedora_postgresql_modeshape_settings: "-Dfcrepo.postgresql.username={{project_db_user}} -Dfcrepo.postgresql.password={{project_db_password}} -Dfcrepo.postgresql.host={{project_db_host}} -Dfcrepo.postgresql.port={{project_db_port}}"
 fedora_java_vm_opts: "{{ project_fedora_java_vm_opts | default('-Xms512m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:MetaspaceSize=256m -XX:MaxMetaspaceSize=256m -XX:+DisableExplicitGC') }}"

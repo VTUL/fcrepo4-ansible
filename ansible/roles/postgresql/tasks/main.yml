@@ -35,8 +35,8 @@
   copy:
     src: pg_hba.conf
     dest: /etc/postgresql/{{ postgres_version }}/main/pg_hba.conf
-    group: '{{ database_group }}'
-    owner: '{{ database_user }}'
+    group: postgres
+    owner: postgres
   register: configure_postgres
   when: postgresql_is_local
 
@@ -51,17 +51,3 @@
     name: postgresql
     state: restarted
   when: configure_postgres.changed
-
-- name: create project database role on local postgresql server
-  postgresql_user:
-    name: '{{ project_db_user }}'
-    password: '{{ project_db_password }}'
-    role_attr_flags: CREATEDB
-  when: postgresql_is_local
-
-- name: create project database on local postgresql server
-  postgresql_db:
-    name: '{{ project_db_name }}'
-    encoding: 'UTF-8'
-    owner: '{{ project_db_user }}'
-  when: postgresql_is_local

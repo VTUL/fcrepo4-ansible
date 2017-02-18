@@ -50,6 +50,9 @@
     mode: 0440
   when: fedora_local_modeshape_config_file|is_file
 
+- include: postgresql_setup.yml
+  when: fedora_use_postgresql_modeshape|bool
+
 - name: add fedora and java config options to tomcat
   lineinfile:
     dest: /etc/default/tomcat7
@@ -59,6 +62,7 @@
       -Djava.awt.headless=true
       -Dfile.encoding=UTF-8
       -server
+      {{ fedora_postgresql_modeshape_settings if fedora_use_postgresql_modeshape|bool else "" }}
       {{ fedora_java_vm_opts }}'
     regexp: "^JAVA_OPTS=.*"
     state: present
