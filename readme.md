@@ -26,7 +26,7 @@ ansible-playbook --limit [ip address] site.yml -b
 
 ### Fedora Configuration
 
-* Default is Fedora 4.7.1 with leveldb.
+* Default is Fedora 4.7.1 with a file-based database.
 * To install different Fedora 4 version or other configurations, see [fedora4 role readme](ansible/roles/fedora4)
 * To install Fedora 4 with PostgreSQL database, set `fedora_use_postgresql_modeshape: yes` in `ansible/site_vars.yml` and set other DB-related settings there as needed.  
 
