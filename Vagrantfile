@@ -103,6 +103,26 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       override.vm.network :forwarded_port, host: 8080, guest: 8080
     end
 
+    fcrepo4.vm.provider :openstack do |os, override|
+      keypair = "#{ENV['KEYPAIR_NAME']}"
+      keypair_filename = "#{ENV['KEYPAIR_FILE']}"
+      # OpenStack authentication information
+      os.openstack_auth_url = "#{ENV['OS_AUTH_URL']}/tokens"
+      os.username     = "#{ENV['OS_USERNAME']}"
+      os.password     = "#{ENV['OS_PASSWORD']}"
+      os.tenant_name  = "#{ENV['OS_TENANT_NAME']}"
+      os.region       = "#{ENV['OS_REGION_NAME']}"
+      override.ssh.username = "cc"
+      os.keypair_name = keypair # as stored in Nova
+      override.ssh.private_key_path = "#{keypair_filename}"
+      # OpenStack image information
+      os.flavor       = "m1.medium"
+      os.image        = "Ubuntu-Server-14.04-LTS"
+      os.security_groups = security_groups('OS_SECURITY_GROUPS')
+      os.floating_ip  = "#{ENV['OS_FLOATING_IP']}"
+      os.server_name  = 'fcrepo4'
+    end
+
     fcrepo4.vm.provider :aws do |aws, override|
       keypair = "#{ENV['KEYPAIR_NAME']}"
       keypair_filename = "#{ENV['KEYPAIR_FILE']}"
