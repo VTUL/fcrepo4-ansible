@@ -152,13 +152,13 @@ vagrant ssh-config | grep HostName | awk '{print $2}'
 When using Ansible to provision directly, the playbook will be executed on the server whose IP address is given as `IP`. When the playbook finishes with no failures, the server is accessible at this URL:
 
 ```
-http://[IP]
+http://[IP]:8080/fcrepo/
 ```
 
 or
 
 ```
-https://[IP]
+https://[IP]:8080/fcrepo/
 ```
 
 ### Postgres
