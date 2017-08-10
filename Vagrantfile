@@ -129,12 +129,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       override.vm.box = "aws_dummy"
       override.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
       override.vm.box_check_update = false
+      override.nfs.functional = false
       aws.access_key_id = ENV['AWS_ACCESS_KEY']
       aws.secret_access_key = ENV['AWS_SECRET_KEY']
       aws.keypair_name = keypair
-      aws.ami = "ami-df0607b5" # Ubuntu Trusty LTS
+      aws.ami = "ami-e7ab8a9c" # Ubuntu Trusty LTS
       aws.region = "us-east-1"
-      aws.instance_type = "t2.medium"
+      aws.instance_type = "m3.large"
       aws.security_groups = security_groups('AWS_SECURITY_GROUPS')
       override.ssh.username = "ubuntu"
       override.ssh.private_key_path = "#{keypair_filename}"
