@@ -133,8 +133,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       aws.access_key_id = ENV['AWS_ACCESS_KEY']
       aws.secret_access_key = ENV['AWS_SECRET_KEY']
       aws.keypair_name = keypair
-      aws.ami = "ami-e7ab8a9c" # Ubuntu Trusty LTS
-      aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 500 }]
+      aws.ami = "ami-0f9cf087c1f27d9b1" # Ubuntu Server 16.04 LTS
+      aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 50 }]
       aws.region = "us-east-1"
       aws.instance_type = "m3.large"
       aws.security_groups = security_groups('AWS_SECURITY_GROUPS')
