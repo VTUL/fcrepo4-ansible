@@ -1,13 +1,4 @@
 ---
-- name: dependency provisioning
-  hosts: all
-  become: yes
-  become_method: sudo
-  gather_facts: false
-  tasks:
-    - name: install python2
-      raw: sudo apt-get update && apt-get -y install python-simplejson
-
 - name: provision a Fedora 4 instance
   hosts: all
 

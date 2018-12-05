@@ -89,6 +89,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "ansible/fcrepo4.yml"
     ansible.verbose = ""
+    ansible.host_vars = {
+       :fcrepo4 => {'ansible_python_interpreter' => '/usr/bin/python3'}
+    }
   end
 
   # Application server
