@@ -148,6 +148,10 @@ https://[IP]:8080/fcrepo/
 
 Currently, only local databases are tested.  Thus, ensure `project_db_host` does not point to a remote PostgreSQL server.
 
+### Python 3
+
+Currently, this Ansible is setup to have only Python 3 installed.
+
 ## Maintainers
 
 Current maintainers:
