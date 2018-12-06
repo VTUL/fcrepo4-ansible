@@ -126,6 +126,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       aws.tags = {
         'Name' => 'fcrepo4'
       }
+      override.vm.synced_folder ".", "/vagrant", disabled: false, type: 'rsync'
     end
 
   end

@@ -17,13 +17,6 @@ cd /path/to/fcrepo4-ansible
 vagrant up --provider aws
 ```
 
-To install to OpenStack, do the following:
-
-```
-cd /path/to/fcrepo4-ansible
-vagrant up --provider openstack
-```
-
 If using Ansible directly, you will need the IP address of the server you plan to provision. Execute the following command:
 
 ```
@@ -42,11 +35,10 @@ Installation
 
 These scripts are intended to be run on a Unix-like system. They are tested to work on Mac OSX.
 
-To use these scripts, [Vagrant](https://www.vagrantup.com/) must already have been installed on the local system with the [VirtualBox](http://www.virtualbox.org) provider working. For provisioning to AWS, the `aws` provider must also be installed. This can be done by executing the following command, which will install the `aws` Vagrant provider plugin: `vagrant plugin install vagrant-aws`. To provision to the OpenStack Chameleon Cloud, the openstack provider needs to be installed. It can be installed via the following command: `vagrant plugin install vagrant-openstack-provider`.
-
+To use these scripts, [Vagrant](https://www.vagrantup.com/) must already have been installed on the local system with the [VirtualBox](http://www.virtualbox.org) provider working. For provisioning to AWS, the `aws` provider must also be installed. This can be done by executing the following command, which will install the `aws` Vagrant provider plugin: `vagrant plugin install vagrant-aws`.
 You will need version 1.6+ of [Vagrant](https://vagrantup.com) installed on the local system.
 
-A version of [Ansible](https://ansible.com) at least 2.1+ must be installed on the local system.
+A version of [Ansible](https://ansible.com) at least 2.5+ must be installed on the local system.
 
 Ansible is easily installed via [Homebrew](http://brew.sh) on Mac OSX via the following command:
 
@@ -96,7 +88,7 @@ port being accessed on the VM. These ports are as follows:
 
 Local | VM   | Description
 ----- | ---- | -----------
-8888  | 8080 | Tomcat (if applicable)
+8080  | 8080 | Tomcat (if applicable)
 
 ### AWS
 
@@ -108,27 +100,13 @@ vagrant ssh
 
 The installation and setup of the application and associated software could take quite a while. Its progress will be logged to the screen during the execution of `vagrant up --provider aws`.
 
-When installation is complete and services are running, you can access the application via this URL: `https://$SERVER_HOSTNAME`, where `$SERVER_HOSTNAME` is the hostname of the AWS instance just deployed.  This can be determined by running the following command in the installation scripts directory:
+When installation is complete and services are running, you can access the application via this URL: `http://$SERVER_HOSTNAME:8080/fcrepo/`, where `$SERVER_HOSTNAME` is the hostname of the AWS instance just deployed.  This can be determined by running the following command in the installation scripts directory:
 
 ```
 vagrant ssh-config | grep HostName | awk '{print $2}'
 ```
 
 Vagrant commands such as `halt` and `destroy` behave analogously on the AWS instance as they do for local Vagrant VMs.
-
-### OpenStack
-
-Installation to OpenStack is similar to that of AWS above. After provisioning with `vagrant up --provider openstack` it should be possible to log in to the newly-deployed machine via SSH:
-
-```
-vagrant ssh
-```
-
-As with the `aws` provider, the application can be accessed via the URL `https://$SERVER_HOSTNAME`, where `$SERVER_HOSTNAME` is the hostname of the OpenStack instance just deployed. You can determine the hostname by using the following command:
-
-```
-vagrant ssh-config | grep HostName | awk '{print $2}'
-```
 
 ### Ansible
 
