@@ -1,7 +1,7 @@
 ---
 local_files_dir: "{{ playbook_dir }}/local_files"
 apt_cache_timeout: 1800
-fedora_version: 4.7.3
+fedora_version: 4.7.5
 fedora_use_postgresql_modeshape: no
 project_db_host: localhost
 # The PostgreSQL user fedora4 used to create the fcrepo PostgreSQL database

@@ -1,4 +1,4 @@
 ---
 # PostgreSQL-related settings
 postgres_version: "9.4"
-postgresql_is_local: "{{ 'true' if project_db_host | search( 'localhost|127\\.0\\.0\\.1|^/') else 'false' }}"
+postgresql_is_local: "{{ 'true' if project_db_host is search( 'localhost|127\\.0\\.0\\.1|^/') else 'false' }}"

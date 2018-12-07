@@ -89,6 +89,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "ansible/fcrepo4.yml"
     ansible.verbose = ""
+    ansible.host_vars = {
+       :fcrepo4 => {'ansible_python_interpreter' => '/usr/bin/python3'}
+    }
   end
 
   # Application server
@@ -96,31 +99,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     fcrepo4.vm.hostname = "fcrepo4"
 
     fcrepo4.vm.provider :virtualbox do |vb, override|
-      override.vm.box = "ubuntu/trusty64"
+      override.vm.box = "ubuntu/xenial64"
       vb.memory = 4096
       vb.cpus = 2
       # Forward Tomcat/Fedora port in VM to port 8080 on local machine
       override.vm.network :forwarded_port, host: 8080, guest: 8080
-    end
-
-    fcrepo4.vm.provider :openstack do |os, override|
-      keypair = "#{ENV['KEYPAIR_NAME']}"
-      keypair_filename = "#{ENV['KEYPAIR_FILE']}"
-      # OpenStack authentication information
-      os.openstack_auth_url = "#{ENV['OS_AUTH_URL']}/tokens"
-      os.username     = "#{ENV['OS_USERNAME']}"
-      os.password     = "#{ENV['OS_PASSWORD']}"
-      os.tenant_name  = "#{ENV['OS_TENANT_NAME']}"
-      os.region       = "#{ENV['OS_REGION_NAME']}"
-      override.ssh.username = "cc"
-      os.keypair_name = keypair # as stored in Nova
-      override.ssh.private_key_path = "#{keypair_filename}"
-      # OpenStack image information
-      os.flavor       = "m1.medium"
-      os.image        = "Ubuntu-Server-14.04-LTS"
-      os.security_groups = security_groups('OS_SECURITY_GROUPS')
-      os.floating_ip  = "#{ENV['OS_FLOATING_IP']}"
-      os.server_name  = 'fcrepo4'
     end
 
     fcrepo4.vm.provider :aws do |aws, override|
@@ -133,8 +116,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       aws.access_key_id = ENV['AWS_ACCESS_KEY']
       aws.secret_access_key = ENV['AWS_SECRET_KEY']
       aws.keypair_name = keypair
-      aws.ami = "ami-e7ab8a9c" # Ubuntu Trusty LTS
-      aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 500 }]
+      aws.ami = "ami-0f9cf087c1f27d9b1" # Ubuntu Server 16.04 LTS
+      aws.block_device_mapping = [{ 'DeviceName' => '/dev/sda1', 'Ebs.VolumeSize' => 50 }]
       aws.region = "us-east-1"
       aws.instance_type = "m3.large"
       aws.security_groups = security_groups('AWS_SECURITY_GROUPS')
@@ -143,6 +126,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       aws.tags = {
         'Name' => 'fcrepo4'
       }
+      override.vm.synced_folder ".", "/vagrant", disabled: false, type: 'rsync'
     end
 
   end

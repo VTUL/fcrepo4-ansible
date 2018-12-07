@@ -30,7 +30,7 @@
     group: "{{ fedora_group }}"
     mode: 0770
     state: directory
-  when: fedora_local_modeshape_config_file|is_file
+  when: fedora_local_modeshape_config_file is is_file
 
 - name: download fedora war
   get_url:
@@ -48,7 +48,7 @@
     owner: "{{ fedora_user }}"
     group: "{{ fedora_group }}"
     mode: 0440
-  when: fedora_local_modeshape_config_file|is_file
+  when: fedora_local_modeshape_config_file is is_file
 
 - include: postgresql_setup.yml
   when: fedora_use_postgresql_modeshape|bool
@@ -58,7 +58,7 @@
     dest: /etc/default/tomcat7
     line: >
       JAVA_OPTS='-Dfcrepo.home={{ fedora_data_dir }}
-      -Dfcrepo.modeshape.configuration="{{'file:'+fedora_remote_modeshape_config_file if fedora_local_modeshape_config_file|is_file else fedora_modeshape_config}}"
+      -Dfcrepo.modeshape.configuration="{{'file:'+fedora_remote_modeshape_config_file if fedora_local_modeshape_config_file is is_file else fedora_modeshape_config}}"
       -Djava.awt.headless=true
       -Dfile.encoding=UTF-8
       -server
